@@ -1,4 +1,4 @@
-package infixtopostfix
+package intopostfix
 
 import "strings"
 
