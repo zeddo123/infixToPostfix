@@ -10,6 +10,7 @@ var operators = map[rune]int{
 	'-': 1,
 	'*': 2,
 	'/': 2,
+	'^': 3,
 }
 
 // Convert : converts a infix expression to postfix
