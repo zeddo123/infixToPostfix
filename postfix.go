@@ -36,7 +36,7 @@ func process(char rune, stack []rune, postfix *strings.Builder) []rune {
 	default:
 		value := operators[char]
 		if len(stack) == 0 || value > operators[top(stack)] {
-			// if the stack is empty of the new operator has more precedent, push it
+			// if the stack is empty or the new operator has more precedent, push it
 			stack = append(stack, char)
 		} else if value < operators[top(stack)] {
 			stack = pop(stack)
