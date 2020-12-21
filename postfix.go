@@ -17,10 +17,28 @@ var operators = map[rune]int{
 func Convert(infix string) (postfix strings.Builder) {
 	var stack []rune
 	for _, i := range infix {
-		if unicode.IsLetter(i) {
+		if unicode.IsLetter(i) || unicode.IsNumber(i) {
 			postfix.WriteRune(i)
-		} else {
+		} else if i == ' ' {
+			continue
+		}else {
 			stack = process(i, stack, &postfix)
+		}
+	}
+	stack = popuntilempty(stack, &postfix)
+	return
+}
+
+// ConvertExtended: converts a infix expression to postfix, and adds the ability to give a operators map
+func ConvertExtended(infix string, operators map[rune]int) (postfix strings.Builder){
+	var stack []rune
+	for _, i := range infix{
+		if unicode.IsLetter(i) || unicode.IsNumber(i) {
+			postfix. WriteRune(i)
+		} else if i == ' ' {
+			continue
+		} else {
+			stack = processMap(i, stack, &postfix, operators)
 		}
 	}
 	stack = popuntilempty(stack, &postfix)
@@ -39,8 +57,31 @@ func process(char rune, stack []rune, postfix *strings.Builder) []rune {
 			// if the stack is empty or the new operator has more precedent, push it
 			stack = append(stack, char)
 		} else if value < operators[top(stack)] {
+			postfix.WriteRune(top(stack))
 			stack = pop(stack)
 			stack = process(char, stack, postfix)
+		} else {
+			postfix.WriteRune(top(stack))
+			stack = swap(stack, char)
+		}
+	}
+	return stack
+}
+
+func processMap(char rune, stack []rune, postfix *strings.Builder, operators map[rune]int) []rune {
+	switch char {
+	case '(':
+		stack = append(stack, char)
+	case ')':
+		stack = parenthesisPop(stack, postfix)
+	default:
+		value := operators[char]
+		if len(stack) == 0 || value > operators[top(stack)]{
+			stack = append(stack, char)
+		} else if value < operators[top(stack)] {
+			postfix.WriteRune(top(stack))
+			stack = pop(stack)
+			stack = processMap(char, stack, postfix, operators)
 		} else {
 			postfix.WriteRune(top(stack))
 			stack = swap(stack, char)
