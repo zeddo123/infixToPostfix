@@ -1,5 +1,5 @@
 # intopostfix
-This is a simple plugin to convert infix expressions to postfix.
+This is a simple package to convert infix expressions to postfix.
 
 ## Example usage
 ```go
