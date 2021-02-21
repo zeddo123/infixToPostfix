@@ -27,37 +27,14 @@ func ConvertExtended(infix string, operators map[rune]int) (postfix strings.Buil
 		} else if unicode.IsSpace(i) {
 			continue
 		} else {
-			stack = processMap(i, stack, &postfix, operators)
+			stack = process(i, stack, &postfix, operators)
 		}
 	}
 	stack = popuntilempty(stack, &postfix)
 	return
 }
 
-func process(char rune, stack []rune, postfix *strings.Builder) []rune {
-	switch char {
-	case '(':
-		stack = append(stack, char)
-	case ')':
-		stack = parenthesisPop(stack, postfix)
-	default:
-		value := operators[char]
-		if len(stack) == 0 || value > operators[top(stack)] {
-			// if the stack is empty or the new operator has more precedent, push it
-			stack = append(stack, char)
-		} else if value < operators[top(stack)] {
-			postfix.WriteRune(top(stack))
-			stack = pop(stack)
-			stack = process(char, stack, postfix)
-		} else {
-			postfix.WriteRune(top(stack))
-			stack = swap(stack, char)
-		}
-	}
-	return stack
-}
-
-func processMap(char rune, stack []rune, postfix *strings.Builder, operators map[rune]int) []rune {
+func process(char rune, stack []rune, postfix *strings.Builder, operators map[rune]int) []rune {
 	switch char {
 	case '(':
 		stack = append(stack, char)
@@ -70,7 +47,7 @@ func processMap(char rune, stack []rune, postfix *strings.Builder, operators map
 		} else if value < operators[top(stack)] {
 			postfix.WriteRune(top(stack))
 			stack = pop(stack)
-			stack = processMap(char, stack, postfix, operators)
+			stack = process(char, stack, postfix, operators)
 		} else {
 			postfix.WriteRune(top(stack))
 			stack = swap(stack, char)
