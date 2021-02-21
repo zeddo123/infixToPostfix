@@ -19,7 +19,7 @@ func Convert(infix string) (postfix strings.Builder) {
 	for _, i := range infix {
 		if unicode.IsLetter(i) || unicode.IsNumber(i) {
 			postfix.WriteRune(i)
-		} else if i == ' ' {
+		} else if unicode.IsSpace(i) {
 			continue
 		}else {
 			stack = process(i, stack, &postfix)
