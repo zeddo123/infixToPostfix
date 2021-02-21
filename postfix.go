@@ -15,18 +15,7 @@ var operators = map[rune]int{
 
 // Convert : converts a infix expression to postfix
 func Convert(infix string) (postfix strings.Builder) {
-	var stack []rune
-	for _, i := range infix {
-		if unicode.IsLetter(i) || unicode.IsNumber(i) {
-			postfix.WriteRune(i)
-		} else if unicode.IsSpace(i) {
-			continue
-		}else {
-			stack = process(i, stack, &postfix)
-		}
-	}
-	stack = popuntilempty(stack, &postfix)
-	return
+	return ConvertExtended(infix, operators)
 }
 
 // ConvertExtended: converts a infix expression to postfix, and adds the ability to give a operators map
@@ -34,8 +23,8 @@ func ConvertExtended(infix string, operators map[rune]int) (postfix strings.Buil
 	var stack []rune
 	for _, i := range infix{
 		if unicode.IsLetter(i) || unicode.IsNumber(i) {
-			postfix. WriteRune(i)
-		} else if i == ' ' {
+			postfix.WriteRune(i)
+		} else if unicode.IsSpace(i){
 			continue
 		} else {
 			stack = processMap(i, stack, &postfix, operators)
